@@ -1,5 +1,4 @@
-package com.example.demojpalab.users;
-
+package com.example.demojpalab.user;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,18 +11,11 @@ public class User {
 
     private String username;
     private String password;
+
     private String fullName;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    List<UserRole> appUserRoles;
-
-    public List<UserRole> getAppUserRoles() {
-        return appUserRoles;
-    }
-
-    public void setAppUserRoles(List<UserRole> appUserRoles) {
-        this.appUserRoles = appUserRoles;
-    }
+    List<UserRole> userRoles;
 
     public Long getId() {
         return id;
@@ -55,5 +47,18 @@ public class User {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public List<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(List<UserRole> userRoles) {
+        this.userRoles = userRoles;
+    }
+
+
+    public boolean isAdmin() {
+        return true;
     }
 }

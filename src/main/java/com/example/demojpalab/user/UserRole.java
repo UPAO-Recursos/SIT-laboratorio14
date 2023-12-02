@@ -1,4 +1,4 @@
-package com.example.demojpalab.users;
+package com.example.demojpalab.user;
 
 import org.springframework.security.core.GrantedAuthority;
 

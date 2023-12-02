@@ -1,5 +1,6 @@
 package com.example.demojpalab.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
@@ -12,10 +13,9 @@ public class JwtTokenFilterConfigurer extends SecurityConfigurerAdapter<DefaultS
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-
     @Override
     public void configure(HttpSecurity builder) throws Exception {
-        JwtTokenFilter customFilter = new JwtTokenFilter(jwtTokenProvider);
-        builder.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
+        var jwtTokenFilter = new JwtTokenFilter(jwtTokenProvider);
+        builder.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

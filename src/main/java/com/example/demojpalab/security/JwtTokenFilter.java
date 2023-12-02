@@ -1,8 +1,11 @@
 package com.example.demojpalab.security;
 
 import com.example.demojpalab.exceptions.ValidationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Service
 public class JwtTokenFilter extends OncePerRequestFilter {
     private JwtTokenProvider jwtTokenProvider;
 
@@ -18,10 +22,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = jwtTokenProvider.resolveToken(request);
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
 
         try {
             if (token != null && jwtTokenProvider.validateToken(token)) {
@@ -30,9 +33,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }
         } catch (ValidationException ex) {
             SecurityContextHolder.clearContext();
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, ex.getMessage());
+            httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN, ex.getMessage());
+            return;
         }
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }
