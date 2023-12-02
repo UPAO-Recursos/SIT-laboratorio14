@@ -7,3 +7,24 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    networks:
+      - dbnetwork
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: example
+      MYSQL_USER: example
+      MYSQL_PASSWORD: example
+    networks:
+      - dbnetwork
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+
+networks:
+  dbnetwork:
+    driver: bridge
